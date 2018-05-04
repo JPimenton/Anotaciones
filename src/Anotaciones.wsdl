@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://main.aytos.es" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://main.aytos.es">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://main.aytos.es">
+            <xs:element name="Leer">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="args0" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LeerResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Escribir">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="args0" type="xs:int"/>
+                        <xs:element minOccurs="0" name="args1" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="LeerRequest">
+        <wsdl:part name="parameters" element="ns:Leer"/>
+    </wsdl:message>
+    <wsdl:message name="LeerResponse">
+        <wsdl:part name="parameters" element="ns:LeerResponse"/>
+    </wsdl:message>
+    <wsdl:message name="EscribirRequest">
+        <wsdl:part name="parameters" element="ns:Escribir"/>
+    </wsdl:message>
+    <wsdl:portType name="AnotacionesPortType">
+        <wsdl:operation name="Leer">
+            <wsdl:input message="ns:LeerRequest" wsaw:Action="urn:Leer"/>
+            <wsdl:output message="ns:LeerResponse" wsaw:Action="urn:LeerResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="Escribir">
+            <wsdl:input message="ns:EscribirRequest" wsaw:Action="urn:Escribir"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="AnotacionesSoap11Binding" type="ns:AnotacionesPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="Leer">
+            <soap:operation soapAction="urn:Leer" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Escribir">
+            <soap:operation soapAction="urn:Escribir" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="AnotacionesSoap12Binding" type="ns:AnotacionesPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="Leer">
+            <soap12:operation soapAction="urn:Leer" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Escribir">
+            <soap12:operation soapAction="urn:Escribir" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="AnotacionesHttpBinding" type="ns:AnotacionesPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="Leer">
+            <http:operation location="Anotaciones/Leer"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="Leer"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="Leer"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Escribir">
+            <http:operation location="Anotaciones/Escribir"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="Escribir"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="Anotaciones">
+        <wsdl:port name="AnotacionesHttpSoap11Endpoint" binding="ns:AnotacionesSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/Anotaciones"/>
+        </wsdl:port>
+        <wsdl:port name="AnotacionesHttpSoap12Endpoint" binding="ns:AnotacionesSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/Anotaciones"/>
+        </wsdl:port>
+        <wsdl:port name="AnotacionesHttpEndpoint" binding="ns:AnotacionesHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/Anotaciones"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
